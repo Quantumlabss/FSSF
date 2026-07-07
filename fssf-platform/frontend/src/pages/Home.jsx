@@ -16,7 +16,7 @@ export default function Home() {
     <>
       <section className="fssf-hero">
         <div className="container position-relative">
-          <div className="eyebrow">Pavlov VR // Milsim Unit // Est. 2024</div>
+          <div className="eyebrow">Pavlov VR // Milsim Unit // Est. 2026</div>
           <h1>First Special<br />Service Force</h1>
           <p className="lead">
             A joint Canadian-American strike force built for coordinated small-unit tactics
