@@ -8,5 +8,5 @@
 //   Separate host                         ->  const API_BASE = 'https://api.yourdomain.com/api';
 // ==========================================================================
 window.FSSF_CONFIG = {
-  API_BASE: 'http://localhost:4000/api',
+  API_BASE: 'https://api.fssfvr.com/api',
 };
