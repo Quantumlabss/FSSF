@@ -47,6 +47,14 @@ async function start() {
     await sequelize.authenticate();
     console.log('Connected to PostgreSQL.');
     app.listen(PORT, () => console.log(`FSSF API listening on port ${PORT}`));
+
+    // Start the Discord bot in the same process, unless explicitly disabled.
+    // It no-ops (with a log line) if DISCORD_BOT_TOKEN / DISCORD_GUILD_ID
+    // aren't set, so this is safe to leave on even before Discord is configured.
+    if (process.env.ENABLE_BOT !== 'false') {
+      const { startBot } = require('./bot/bot');
+      startBot().catch((err) => console.error('Bot failed to start:', err.message));
+    }
   } catch (err) {
     console.error('Unable to connect to the database:', err.message);
     process.exit(1);

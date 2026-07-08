@@ -82,9 +82,14 @@ In the [Discord Developer Portal](https://discord.com/developers/applications):
 cd backend
 cp .env.example .env          # fill in DATABASE_URL, JWT_SECRET, Discord values
 npm install
-npm run dev                   # API on http://localhost:4000
-npm run bot                   # in a second terminal: starts the Discord bot
+npm run dev                   # API + Discord bot on http://localhost:4000
 ```
+
+The bot now starts automatically in the same process as the API — you don't
+need a second terminal. If `DISCORD_BOT_TOKEN` / `DISCORD_GUILD_ID` aren't set
+yet, it just logs a notice and skips itself; the API keeps running normally.
+Set `ENABLE_BOT=false` in `.env` if you'd rather run the bot as a fully
+separate process (`npm run bot` still works standalone).
 
 ### 4. Frontend — static site (no npm)
 
