@@ -72,14 +72,19 @@ router.get('/discord/callback', async (req, res) => {
     await user.save();
 
     const token = signToken(user);
+    // If the frontend is hosted on a different domain than this API (typical
+    // for a statically-hosted site), the cookie must be SameSite=None +
+    // Secure, which requires the API itself to be served over HTTPS.
+    const crossOrigin = process.env.CROSS_ORIGIN_CLIENT === 'true';
     res.cookie('fssf_token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: crossOrigin || process.env.NODE_ENV === 'production',
+      sameSite: crossOrigin ? 'none' : 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    res.redirect(`${process.env.CLIENT_URL}/auth/callback`);
+    // The static site uses hash-based routing (#/auth/callback).
+    res.redirect(`${process.env.CLIENT_URL}/#/auth/callback`);
   } catch (err) {
     console.error('Discord OAuth error:', err.response?.data || err.message);
     res.redirect(`${process.env.CLIENT_URL}/login?error=oauth_failed`);

@@ -4,10 +4,22 @@ Full-stack rebuild of the FSSF Pavlov VR unit website: React + Bootstrap fronten
 Node/Express API, PostgreSQL via Sequelize, Discord OAuth2 login, and a Discord bot
 that keeps roles/ranks/roster in sync.
 
+## Two frontends, pick one
+
+- **`static-site/`** — plain HTML/CSS/JS, Bootstrap loaded from a CDN, no build
+  step, no `npm install`. Just upload the folder to any static host (Netlify,
+  GitHub Pages, S3/CloudFront, or your own nginx box) or open it locally.
+  This is the simplest option if you don't want to run Node for the frontend.
+- **`frontend/`** — the React + Vite version, functionally identical, if you'd
+  rather work in React and are fine running `npm run build`.
+
+Both talk to the same `backend/` API — pick whichever you want to host and
+ignore the other folder.
+
 ## Stack
 
-- **Frontend:** React 18 (Vite) + React Router + Bootstrap 5 + a custom "field manual"
-  theme (`frontend/src/styles/theme.css`)
+- **Frontend:** Plain HTML/CSS/JS (`static-site/`) or React 18 + Vite (`frontend/`) —
+  both use the same "field manual" theme (`css/theme.css` / `src/styles/theme.css`)
 - **Backend:** Node.js + Express, REST API under `/api/*`
 - **Database:** PostgreSQL, accessed through Sequelize (ORM layer in `backend/src/models`)
 - **Auth:** Discord OAuth2 (authorization-code flow) + JWT session cookie
@@ -74,13 +86,33 @@ npm run dev                   # API on http://localhost:4000
 npm run bot                   # in a second terminal: starts the Discord bot
 ```
 
-### 4. Frontend
+### 4. Frontend — static site (no npm)
+
+1. Open `static-site/js/config.js` and set `API_BASE` to your backend's URL, e.g.
+   `http://localhost:4000/api` for local testing, or `https://api.yourdomain.com/api`
+   once deployed.
+2. Serve the `static-site/` folder as static files — any of these work:
+   - Local testing: `cd static-site && python3 -m http.server 5173`, then open
+     `http://localhost:5173`
+   - Production: upload the whole `static-site/` folder to Netlify, GitHub
+     Pages, S3+CloudFront, Cloudflare Pages, or drop it in nginx's webroot.
+3. In `backend/.env`, set `CLIENT_URL` to wherever the static site is served
+   from (no trailing slash), so CORS and the post-login redirect work. If the
+   static site is on a **different domain** than the API, also set
+   `CROSS_ORIGIN_CLIENT=true` in `backend/.env` — cross-domain cookies require
+   this plus HTTPS on the API in production.
+
+### 4b. Frontend — React version (needs npm)
 
 ```bash
 cd frontend
 npm install
 npm run dev                   # http://localhost:5173, proxies /api to :4000
 ```
+
+For production, `npm run build` produces static files in `frontend/dist/` that
+you can host the same way as `static-site/` — but then it's just a build step,
+not something you re-run on every request.
 
 ## How the pieces fit together
 
