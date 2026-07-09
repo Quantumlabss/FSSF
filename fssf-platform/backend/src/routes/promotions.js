@@ -7,7 +7,7 @@ const { requireRole } = require('../middleware/permissions');
 // Full promotion history (public roster page can show this too)
 router.get('/', async (req, res) => {
   const promotions = await Promotion.findAll({
-    order: [['createdAt', 'DESC']],
+    order: [['created_at', 'DESC']],
     include: [
       { model: User, as: 'user', attributes: ['id', 'username', 'callsign'] },
       { model: User, as: 'issuer', attributes: ['id', 'username', 'callsign'] },
@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
 router.get('/user/:userId', async (req, res) => {
   const promotions = await Promotion.findAll({
     where: { userId: req.params.userId },
-    order: [['createdAt', 'DESC']],
+    order: [['created_at', 'DESC']],
     include: [{ model: Rank, as: 'oldRank' }, { model: Rank, as: 'newRank' }],
   });
   res.json({ promotions });

@@ -7,7 +7,7 @@ const upload = require('../middleware/upload');
 
 router.get('/', async (req, res) => {
   const images = await GalleryImage.findAll({
-    order: [['uploadedAt', 'DESC']],
+    order: [['uploaded_at', 'DESC']],
     include: [
       { model: User, as: 'uploader', attributes: ['id', 'username', 'callsign'] },
       { model: Event, as: 'event', attributes: ['id', 'title'] },

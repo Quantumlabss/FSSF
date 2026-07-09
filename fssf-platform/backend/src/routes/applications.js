@@ -31,7 +31,7 @@ router.post('/', optionalAuth, async (req, res) => {
 router.get('/mine', requireAuth, async (req, res) => {
   const applications = await Application.findAll({
     where: { userId: req.user.id },
-    order: [['createdAt', 'DESC']],
+    order: [['created_at', 'DESC']],
   });
   res.json({ applications });
 });
@@ -42,7 +42,7 @@ router.get('/', requireAuth, requireRole('nco'), async (req, res) => {
   const where = status ? { status } : {};
   const applications = await Application.findAll({
     where,
-    order: [['createdAt', 'ASC']],
+    order: [['created_at', 'ASC']],
     include: [{ model: User, as: 'reviewer', attributes: ['id', 'username'] }],
   });
   res.json({ applications });

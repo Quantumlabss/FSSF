@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
   const where = req.query.all === 'true' ? {} : { published: true };
   const aars = await AAR.findAll({
     where,
-    order: [['createdAt', 'DESC']],
+    order: [['created_at', 'DESC']],
     include: [
       { model: User, as: 'author', attributes: ['id', 'username', 'callsign'] },
       { model: Event, as: 'event', attributes: ['id', 'title', 'eventDate'] },
